@@ -4,6 +4,9 @@ package main
 
 import (
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/brutella/hc/accessory"
@@ -11,7 +14,6 @@ import (
 	"github.com/brutella/hc/service"
 
 	"github.com/seiterle/hr/bridge"
-	"github.com/stianeikeland/go-rpio"
 	"github.com/stianeikeland/go-rpio/v4"
 )
 
@@ -45,8 +47,18 @@ func main() {
 	if err := rpio.Open(); err != nil {
 		log.Fatal("Failed to access GPIO interface: %v", err)
 	}
+
 	relayOpener := rpio.Pin(relayOne)
 	relayOpener.Output()
+	relayOpener.Low()
+	defer relayOpener.Low()
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		relayOpener.Low()
+		os.Exit(0)
+	}()
 
 	// This is an electric strike lock that is only ever open for 1 second
 	go func() {
