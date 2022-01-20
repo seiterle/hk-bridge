@@ -57,7 +57,7 @@ func (b *Bridge) update() error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(configFile, data, 666)
+	return ioutil.WriteFile(configFile, data, 0666)
 }
 
 // NewBridge creates a new bridge according to local configuration.
@@ -79,8 +79,8 @@ func NewBridge(as ...*accessory.Accessory) (*Bridge, error) {
 
 	bridge, err := loadConfig()
 	if err != nil {
-		// TODO: create new config?
-		fmt.Println("handle empty config")
+		fmt.Println("failed to find config file")
+		bridge = &Bridge{}
 	}
 
 	if bridge.Name == "" {
@@ -96,7 +96,9 @@ func NewBridge(as ...*accessory.Accessory) (*Bridge, error) {
 		fmt.Println("HomeKit Pin: " + bridge.Pin)
 	}
 
-	bridge.update()
+	if err := bridge.update(); err != nil {
+		log.Fatalf("failed to update config file: %v", err)
+	}
 
 	return bridge, nil
 }
