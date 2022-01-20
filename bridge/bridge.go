@@ -43,11 +43,6 @@ func loadConfig() (*Bridge, error) {
 		return nil, fmt.Errorf("failed to unmarshal config file: %v", err)
 	}
 
-	info := accessory.Info{
-		Name: bridge.Name,
-	}
-	bridge.bridge = accessory.NewBridge(info)
-
 	return &bridge, nil
 }
 
@@ -79,7 +74,7 @@ func NewBridge(as ...*accessory.Accessory) (*Bridge, error) {
 
 	bridge, err := loadConfig()
 	if err != nil {
-		fmt.Println("failed to find config file")
+		log.Print("create new config file")
 		bridge = &Bridge{}
 	}
 
@@ -95,6 +90,11 @@ func NewBridge(as ...*accessory.Accessory) (*Bridge, error) {
 		bridge.Pin = randPin()
 		fmt.Println("HomeKit Pin: " + bridge.Pin)
 	}
+
+	info := accessory.Info{
+		Name: bridge.Name,
+	}
+	bridge.bridge = accessory.NewBridge(info)
 
 	if err := bridge.update(); err != nil {
 		log.Fatalf("failed to update config file: %v", err)
