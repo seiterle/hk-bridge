@@ -1,3 +1,12 @@
+# files
+.DS_Store
+
+# hr specific
+config.yml
+config.yaml
+.env
+.hr
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
