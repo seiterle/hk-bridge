@@ -95,6 +95,7 @@ func NewBridge(as ...*accessory.Accessory) (*Bridge, error) {
 		Name: bridge.Name,
 	}
 	bridge.bridge = accessory.NewBridge(info)
+	bridge.accessories = as
 
 	if err := bridge.update(); err != nil {
 		log.Fatalf("failed to update config file: %v", err)
