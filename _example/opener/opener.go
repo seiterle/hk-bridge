@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	relayOne = 16
+	relayOne = 23
 )
 
 type Lock struct {
