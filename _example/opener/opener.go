@@ -71,7 +71,7 @@ func main() {
 			if characteristic.LockTargetStateUnsecured == ac.Lock.LockTargetState.GetValue() {
 				relayOpener.High()
 				ac.Lock.LockCurrentState.SetValue(characteristic.LockCurrentStateUnsecured)
-				time.Sleep(time.Second)
+				time.Sleep(2 * time.Second)
 			}
 			time.Sleep(time.Millisecond * 250)
 		}
