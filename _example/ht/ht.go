@@ -142,8 +142,9 @@ func main() {
 			if rpio.Low != pinBell.Read() {
 				bell.Control.ProgrammableSwitchEvent.SetValue(characteristic.ProgrammableSwitchEventSinglePress)
 				bellButton.ProgrammableSwitch.ProgrammableSwitchEvent.SetValue(characteristic.ProgrammableSwitchEventSinglePress)
-				time.Sleep(2 * time.Second)
+				time.Sleep(3 * time.Second)
 			}
+			time.Sleep(time.Millisecond * 250)
 		}
 	}()
 
