@@ -140,9 +140,13 @@ func main() {
 	go func() {
 		for {
 			if rpio.Low != pinBell.Read() {
-				bell.Control.ProgrammableSwitchEvent.SetValue(characteristic.ProgrammableSwitchEventSinglePress)
-				bellButton.ProgrammableSwitch.ProgrammableSwitchEvent.SetValue(characteristic.ProgrammableSwitchEventSinglePress)
-				time.Sleep(3 * time.Second)
+				// double check to eliminate false positvie
+				time.Sleep(time.Millisecond * 500)
+				if rpio.Low != pinBell.Read() {
+					bell.Control.ProgrammableSwitchEvent.SetValue(characteristic.ProgrammableSwitchEventSinglePress)
+					bellButton.ProgrammableSwitch.ProgrammableSwitchEvent.SetValue(characteristic.ProgrammableSwitchEventSinglePress)
+					time.Sleep(3 * time.Second)
+				}
 			}
 			time.Sleep(time.Millisecond * 250)
 		}
